@@ -1,114 +1,155 @@
-@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200;300;400;500;600;700&display=swap");
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&family=Roboto:wght@500&display=swap');
 
 * {
-  padding: 0;
-  margin: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-html,
 body {
-  font-family: "Oswald", sans-serif;
-  font-size: 62.5%;
-}
-body {
-  font-size: 1.6rem;
-  background-color: black;
-}
-.hello {
-  text-decoration-color: #1fd12edf;
-  color: #1fd12edf;
-}
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh;
-  align-items: center;
-  justify-content: center;
-  gap: 4rem;
+    background-color: #1e1e2f;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Poppins', sans-serif;
+    overflow: hidden;
+    padding: 20px;
 }
 
-.search {
-  display: flex;
-  width: 50%;
-  max-width: 60rem;
-}
-.search input {
-  padding: 0.5rem 1rem;
-  width: 100%;
-}
-.search input:focus-visible {
-  outline: 1px solid #05386b;
+h1 {
+    color: #fff;
+    margin-bottom: 30px;
+    font-size: 36px;
+    animation: fadeInUp 1s ease-in-out;
 }
 
-.primary-btn {
-  background: #05db17;
-  color: white;
-  padding: 0.75rem 2rem;
-  border: none;
-}
-.primary-btn:hover {
-  background: #05386b;
-}
-.primary-btn:active {
-  background: #05386b;
+input {
+    background-color: #3b3b5c;
+    width: 400px;
+    padding: 18px;
+    font-size: 16px;
+    border: none;
+    border-radius: 10px;
+    color: #FFF;
+    margin-bottom: 35px;
+    transition: transform 0.3s ease;
 }
 
-/* For Card */
+input::placeholder {
+    color: #a5a5c3;
+}
 
-#profileContainer {
-  width: 100%;
+input:focus {
+    outline: none;
+    transform: scale(1.05);
 }
-.profile-box {
-  margin: auto;
-  padding: 4rem 2rem;
-  width: 90%;
-  max-width: 78rem;
-  box-shadow: 0 0 1rem rgba(0, 0, 0, 0.651);
-  transition: 0.5s ease-in;
-  background-color: bisque;
+
+.card {
+    background-color: #2e2e4d;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 800px;
+    padding: 50px;
+    border-radius: 20px;
+    background-image: linear-gradient(315deg, #2e2e4d 0%, #424274 100%);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    transform: scale(0.95);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
 }
-.profile-box:hover {
-  transform: rotate(-2deg) scale(1.01);
-  transition: 0.5s ease-in;
-}
-.top-section {
-  display: flex;
-  justify-content: space-between;
-}
-.top-section button {
-  align-self: center;
-}
-.left {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-.left h1 {
-  font-size: 1.6rem;
+
+.card:hover {
+    transform: scale(1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.7);
 }
 
 .avatar {
-  height: 10rem;
-  width: 10rem;
-}
-.avatar img {
-  height: 100%;
-  width: 100%;
-  border-radius: 50%;
+    height: 150px;
+    width: 150px;
+    border: 10px solid #1e1e2f;
+    border-radius: 50%;
+    animation: breathe 3s ease-in-out infinite;
 }
 
-.about {
-  margin: 2rem;
+.user {
+    color: #fff;
+    margin-top: 30px;
+    text-align: left;
+    animation: fadeInUp 1s ease-in-out;
+    width: 100%;
 }
 
-.status {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+.user h2 {
+    margin-top: 0;
+    font-weight: 700;
+    animation: fadeInUp 1.2s ease-in-out;
 }
 
-.status-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.user h2 a {
+    color: #fff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.user h2 a:hover {
+    color: #a5a5c3;
+}
+
+.user ul {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    padding: 0;
+    width: 100%;
+    animation: fadeInUp 1.4s ease-in-out;
+}
+
+.user ul li {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.user ul li strong {
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.repo {
+    color: #fff;
+    text-decoration: none;
+    background-color: #3b3b5c;
+    border-radius: 5px;
+    font-size: 10px;
+    padding: 5px 10px;
+    margin: 0 6px 6px 0;
+    display: inline-block;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.repo:hover {
+    background-color: #515187;
+    transform: scale(1.1);
+}
+
+@keyframes breathe {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
