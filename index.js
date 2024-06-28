@@ -1,75 +1,65 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const searchInput = document.querySelector('#search');
+window.onload = () => {
+    const searchBox = document.querySelector('#search');
 
-    searchInput.addEventListener('blur', () => handleFormSubmit());
+    searchBox.addEventListener('focusout', () => {
+        formSubmit();
+    });
 
-    fetchUserProfile("bhanu6193");
-});
+    getUser("bhanu6193");
+}
 
-const handleFormSubmit = () => {
-    const searchInput = document.querySelector('#search');
-    if (searchInput.value.trim() !== "") {
-        fetchUserProfile(searchInput.value.trim());
-        searchInput.value = "";
+const formSubmit = () => {
+    const searchBox = document.querySelector('#search');
+    if (searchBox.value !== "") {
+        getUser(searchBox.value);
+        searchBox.value = "";
     }
     return false;
 }
 
-const fetchUserProfile = async (username) => {
+const getUser = async (username) => {
     const API_URL = "https://api.github.com/users";
-    const mainContainer = document.querySelector('#main');
+    const main = document.querySelector('#main');
 
-    try {
-        const response = await fetch(`${API_URL}/${username}`);
-        const userData = await response.json();
+    const response = await fetch(`${API_URL}/${username}`);
+    const data = await response.json();
 
-        const userCard = createUserCard(userData);
-        mainContainer.innerHTML = userCard;
-
-        fetchUserRepos(API_URL, username);
-    } catch (error) {
-        console.error('Error fetching user profile:', error);
-    }
-}
-
-const createUserCard = (userData) => {
-    return `
+    const card = `
         <div class="card">
             <div>
-                <img class="avatar" src="${userData.avatar_url}" alt="User Avatar">
+                <img class="avatar" src="${data.avatar_url}" alt="dp">
             </div>
             <div class="user">
                 <h2>
-                    <a href="${userData.html_url}" target="_blank">${userData.name}</a>
+                    <a href="${data.html_url}" target="_blank">${data.name}</a>
                 </h2>
-                <p>${userData.bio}</p>
+                <p>${data.bio}</p>
                 <ul>
-                    <li>${userData.following}<strong> following</strong></li>
-                    <li>${userData.followers}<strong> followers</strong></li>
-                    <li>${userData.public_repos}<strong> Repos</strong></li>
+                    <li>${data.following}<strong> following</strong></li>
+                    <li>${data.followers}<strong> followers</strong></li>
+                    <li>${data.public_repos}<strong> Repos</strong></li>
                 </ul>
                 <div id="repos"></div>
             </div>
         </div>
     `;
+
+    main.innerHTML = card;
+    getRepos(API_URL, username);
 }
 
-const fetchUserRepos = async (API_URL, username) => {
-    const reposContainer = document.querySelector('#repos');
+const getRepos = async (API_URL, username) => {
+    const repos = document.querySelector('#repos');
 
-    try {
-        const response = await fetch(`${API_URL}/${username}/repos`);
-        const reposData = await response.json();
+    const response = await fetch(`${API_URL}/${username}/repos`);
+    const data = await response.json();
 
-        reposData.forEach(repo => {
-            const repoLink = document.createElement('a');
-            repoLink.classList.add('repo');
-            repoLink.href = repo.html_url;
-            repoLink.innerText = repo.name;
-            repoLink.target = "_blank";
-            reposContainer.appendChild(repoLink);
-        });
-    } catch (error) {
-        console.error('Error fetching user repositories:', error);
-    }
+    data.forEach(repo => {
+        const element = document.createElement('a');
+        element.classList.add('repo');
+        element.href = repo.html_url;
+        element.innerText = repo.name;
+        element.target = "_blank";
+        repos.appendChild(element);
+    });
 }
