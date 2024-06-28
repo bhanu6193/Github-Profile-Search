@@ -1,73 +1,75 @@
-const url = "https://api.github.com/users";
-const searchInputEl = document.getElementById("searchInput");
-const searchButtonEl = document.getElementById("searchBtn");
-const profileContainerEl = document.getElementById("profileContainer");
-const loadingEl = document.getElementById("loading");
+document.addEventListener('DOMContentLoaded', () => {
+    const searchInput = document.querySelector('#search');
 
-const generateProfile = (profile) => {
-  return `
-   <div class="profile-box">
-   <div class="top-section">
-     <div class="left">
-       <div class="avatar">
-         <img alt="avatar" src="${profile.avatar_url}" />
-       </div>
-       <div class="self">
-         <h1>${profile.name}</h1>
-         <h1>@${profile.login}</h1>
-       </div>
-     </div>
-     <a href="${profile.html_url}" target="_black">
-     <button class="primary-btn">Check Profile</button>
-     </a>
-   </div>
-   <div class="about">
-     <h2>About</h2>
-     <p>
-     ${profile.bio}
-     </p>
-   </div>
-   <div class="status">
-     <div class="status-item">
-       <h3>Followers</h3>
-       <p>${profile.followers}</p>
-     </div>
-     <div class="status-item">
-       <h3>Followings</h3>
-       <p>${profile.following}</p>
-     </div>
-     <div class="status-item">
-       <h3>Repos</h3>
-       <p>${profile.public_repos}</p>
-     </div>
-   </div>
- </div>
-   `;
-};
+    searchInput.addEventListener('blur', () => handleFormSubmit());
 
-const fetchProfile = async () => {
-  const username = searchInputEl.value;
+    fetchUserProfile("bhanu6193");
+});
 
-  loadingEl.innerText = "loading.....";
-  loadingEl.style.color = "black";
-
-  try {
-    const res = await fetch(`${url}/${username}`);
-    const data = await res.json();
-    if (data.bio) {
-      loadingEl.innerText = "";
-      profileContainerEl.innerHTML = generateProfile(data);
-    } else {
-      loadingEl.innerHTML = data.message;
-      loadingEl.style.color = "red";
-      profileContainerEl.innerText = "";
+const handleFormSubmit = () => {
+    const searchInput = document.querySelector('#search');
+    if (searchInput.value.trim() !== "") {
+        fetchUserProfile(searchInput.value.trim());
+        searchInput.value = "";
     }
+    return false;
+}
 
-    console.log("data", data);
-  } catch (error) {
-    console.log({ error });
-    loadingEl.innerText = "";
-  }
-};
+const fetchUserProfile = async (username) => {
+    const API_URL = "https://api.github.com/users";
+    const mainContainer = document.querySelector('#main');
 
-searchButtonEl.addEventListener("click", fetchProfile);
+    try {
+        const response = await fetch(`${API_URL}/${username}`);
+        const userData = await response.json();
+
+        const userCard = createUserCard(userData);
+        mainContainer.innerHTML = userCard;
+
+        fetchUserRepos(API_URL, username);
+    } catch (error) {
+        console.error('Error fetching user profile:', error);
+    }
+}
+
+const createUserCard = (userData) => {
+    return `
+        <div class="card">
+            <div>
+                <img class="avatar" src="${userData.avatar_url}" alt="User Avatar">
+            </div>
+            <div class="user">
+                <h2>
+                    <a href="${userData.html_url}" target="_blank">${userData.name}</a>
+                </h2>
+                <p>${userData.bio}</p>
+                <ul>
+                    <li>${userData.following}<strong> following</strong></li>
+                    <li>${userData.followers}<strong> followers</strong></li>
+                    <li>${userData.public_repos}<strong> Repos</strong></li>
+                </ul>
+                <div id="repos"></div>
+            </div>
+        </div>
+    `;
+}
+
+const fetchUserRepos = async (API_URL, username) => {
+    const reposContainer = document.querySelector('#repos');
+
+    try {
+        const response = await fetch(`${API_URL}/${username}/repos`);
+        const reposData = await response.json();
+
+        reposData.forEach(repo => {
+            const repoLink = document.createElement('a');
+            repoLink.classList.add('repo');
+            repoLink.href = repo.html_url;
+            repoLink.innerText = repo.name;
+            repoLink.target = "_blank";
+            reposContainer.appendChild(repoLink);
+        });
+    } catch (error) {
+        console.error('Error fetching user repositories:', error);
+    }
+}
